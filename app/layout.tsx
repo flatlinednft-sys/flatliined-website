@@ -5,7 +5,9 @@ import { Providers } from "./providers"
 import { Chakra_Petch } from "next/font/google"
 import { ThemeProvider } from "@/components/ThemeContext" // Adjust import path
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import Web3Provider from "@/components/Web3Provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { RainbowKitProvider, getDefaultConfig, darkTheme } from "@rainbow-me/rainbowkit"
+import { mainnet, sepolia } from "wagmi/chains"
 
 const chakraPetch = Chakra_Petch({
   subsets: ["latin"],
@@ -33,11 +35,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SmoothScrollProvider>
           <Providers>
-            <Web3Provider>
+            <RainbowKitProvider>
               <ThemeProvider>
                 {children}
               </ThemeProvider>
-            </Web3Provider>
+            </RainbowKitProvider>
           </Providers>
         </SmoothScrollProvider>
       </body>

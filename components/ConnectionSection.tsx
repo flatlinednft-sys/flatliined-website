@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useModal } from "connectkit"
+import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit"
 import { useAccount } from "wagmi"
 import { FiCheck, FiArrowRight } from "react-icons/fi"
 import GlowCard from "./GlowCard"
@@ -39,7 +39,10 @@ async function saveAddressToExcel(address: string, source: "manual" | "connected
 export default function ConnectSection() {
   const { isLight, toggleTheme, accent } = useTheme()
 
-  const { setOpen } = useModal()
+  // RainbowKit Modal Hooks
+  const { openConnectModal } = useConnectModal()
+  const { openAccountModal } = useAccountModal()
+
   const { address: connectedAddress, isConnected } = useAccount()
 
   const limeAccent = isLight ? "#000000" : "#d4ff00"
@@ -219,9 +222,9 @@ export default function ConnectSection() {
                 <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
               </div>
 
-              {/* ConnectKit Button */}
+              {/* RainbowKit Connect / Account Modal Button */}
               <button
-                onClick={() => setOpen(true)}
+                onClick={isConnected ? openAccountModal : openConnectModal}
                 className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"
                 style={{
                   background: limeAccent,

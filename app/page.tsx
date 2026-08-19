@@ -1,7 +1,6 @@
 import HeroVideo from "@/components/HeroVid"
 import ConnectSection from "@/components/ConnectionSection"
 import AboutSection from "@/components/AboutSection"
-import ActivityPanel from "@/components/ActivityPanel"
 import SocialSection from "@/components/Footer"
 
 export default function Home() {

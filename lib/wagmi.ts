@@ -9,9 +9,20 @@ if (!projectId) {
   )
 }
 
-export const config = getDefaultConfig({
-  appName: "Get Flatlined",
-  projectId,
-  chains: [mainnet, sepolia], // drop sepolia when you go live
-  ssr: true,
-})
+declare global {
+  // eslint-disable-next-line no-var
+  var __wagmiConfig: ReturnType<typeof getDefaultConfig> | undefined
+}
+
+export const config =
+  globalThis.__wagmiConfig ??
+  getDefaultConfig({
+    appName: "Get Flatlined",
+    projectId,
+    chains: [mainnet, sepolia], // drop sepolia when you go live
+    ssr: true,
+  })
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.__wagmiConfig = config
+}

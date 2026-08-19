@@ -11,7 +11,7 @@ export default function ThemeToggle({
   return (
     <button
       onClick={onToggle}
-      className={`relative w-16 h-8 border-2 transition-colors duration-300 ${isLight ? "bg-white" : "bg-black"}`}
+      className={`relative w-16 h-8 transition-colors duration-300 ${isLight ? "bg-white" : "bg-black"}`}
       style={{
         borderColor: accent
       }}

@@ -5,7 +5,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useAccount } from "wagmi"
 import { FiCheck, FiArrowRight } from "react-icons/fi"
 import GlowCard from "./GlowCard"
-import EdgerunnerFrame from "./EdgerunnerFrame"
 import ThemeToggle from "./ThemeToggle"
 import { Marquee } from "./magicui/marquee"
 import { useTheme } from "./ThemeContext"
@@ -93,7 +92,6 @@ export default function ConnectSection() {
         isLight ? "bg-white text-black" : "bg-black text-white"
       }`}
     >
-      <EdgerunnerFrame color={accent} />
 
       <div className="relative z-10 max-w-7xl mx-auto">
         <ScrollReveal>

@@ -2,7 +2,6 @@
 
 import React, { useRef, useState, useEffect } from "react"
 
-import EdgerunnerFrame from "./EdgerunnerFrame"
 import MagicBentoCard from "./MagicBento"
 import ScrollVelocity from "./ScrollVelocity"
 import ScrollReveal from "./ScrollReveal"
@@ -80,7 +79,6 @@ export default function AboutSection() {
         isLight ? "bg-white text-black" : "bg-black text-white"
       }`}
     >
-      <EdgerunnerFrame color={accent} />
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* HEADER */}

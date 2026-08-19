@@ -39,7 +39,6 @@ async function saveAddressToExcel(address: string, source: "manual" | "connected
 export default function ConnectSection() {
   const { isLight, toggleTheme, accent } = useTheme()
 
-  // RainbowKit Modal Hooks
   const { openConnectModal } = useConnectModal()
   const { openAccountModal } = useAccountModal()
 
@@ -222,10 +221,10 @@ export default function ConnectSection() {
                 <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
               </div>
 
-              {/* RainbowKit Connect / Account Modal Button */}
+              {/* Wallet Modal Button */}
               <button
                 onClick={isConnected ? openAccountModal : openConnectModal}
-                className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"
+                className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm cursor-pointer"
                 style={{
                   background: limeAccent,
                   borderColor: isLight ? "#000000" : "#000000",

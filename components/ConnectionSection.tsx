@@ -37,6 +37,8 @@ async function saveAddressToExcel(address: string, source: "manual" | "connected
 
 export default function ConnectSection() {
   const { isLight, toggleTheme, accent } = useTheme()
+  
+  // Reown AppKit Hooks
   const { open } = useAppKit()
   const { address: connectedAddress, isConnected } = useAppKitAccount()
 
@@ -217,7 +219,7 @@ export default function ConnectSection() {
                 <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
               </div>
 
-              {/* AppKit Pro Wallet Connection Trigger */}
+              {/* Reown AppKit Connection Button */}
               <button
                 onClick={() => open()}
                 className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"

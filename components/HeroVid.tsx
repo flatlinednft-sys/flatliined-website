@@ -66,7 +66,7 @@ export default function HeroVideo() {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full h-screen bg-black rounded-b-[50px]"
+      className="relative w-full aspect-video md:h-screen overflow-hidden bg-black rounded-b-[24px] md:rounded-b-[50px]"
     >
       {/* VIDEO BACKGROUND */}
       <motion.video
@@ -75,7 +75,7 @@ export default function HeroVideo() {
         loop
         playsInline
         style={{ x: mouseVideoX, y: videoY }}
-        className="absolute inset-0 w-full h-full object-cover scale-150"
+        className="absolute inset-0 w-full h-full object-cover object-center scale-105"
       >
         <source src="/videos/output.mp4" type="video/mp4" />
       </motion.video>
@@ -83,13 +83,12 @@ export default function HeroVideo() {
       {/* OVERLAY */}
       <div className="absolute inset-0 bg-black/50" />
 
-      {/* STICKY TOP-LEFT LOGO (SLIGHTLY BENT, NO SHADOW) */}
+      {/* STICKY TOP-LEFT LOGO */}
       <motion.div
         style={{
           mixBlendMode: "exclusion",
-          transform: "rotate(-deg)",
         }}
-        className="fixed top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 z-50 pointer-events-none"
+        className="fixed top-3 left-3 sm:top-6 sm:left-6 md:top-8 md:left-8 z-50 pointer-events-none"
       >
         <Image
           src="/images/flatlined.svg"
@@ -97,19 +96,18 @@ export default function HeroVideo() {
           width={220}
           height={73}
           priority
-          className="w-20 sm:w-28 md:w-32 lg:w-36 h-auto"
+          className="w-16 sm:w-28 md:w-32 lg:w-36 h-auto"
         />
       </motion.div>
 
-      {/* CENTER HERO LOGO (BENT -20deg NORTHEAST, NO SHADOW) */}
+      {/* CENTER HERO LOGO */}
       <motion.div
         style={{
           x: mouseTextX,
           y: mouseTextY,
           mixBlendMode: "exclusion",
-          transform: "rotate(-20deg)",
         }}
-        className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none"
+        className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none -rotate-[20deg]"
       >
         <Image
           src="/images/flatlined.svg"
@@ -117,7 +115,7 @@ export default function HeroVideo() {
           width={1100}
           height={366}
           priority
-          className="w-[85%] max-w-[1200px] h-auto"
+          className="w-[70%] sm:w-[75%] md:w-[85%] max-w-[1200px] h-auto"
         />
       </motion.div>
     </div>

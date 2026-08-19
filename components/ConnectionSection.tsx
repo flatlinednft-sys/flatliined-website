@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useAppKit, useAppKitAccount } from "@reown/appkit/react"
+import { useModal } from "connectkit"
+import { useAccount } from "wagmi"
 import { FiCheck, FiArrowRight } from "react-icons/fi"
 import GlowCard from "./GlowCard"
 import EdgerunnerFrame from "./EdgerunnerFrame"
@@ -37,10 +38,9 @@ async function saveAddressToExcel(address: string, source: "manual" | "connected
 
 export default function ConnectSection() {
   const { isLight, toggleTheme, accent } = useTheme()
-  
-  // Reown AppKit Hooks
-  const { open } = useAppKit()
-  const { address: connectedAddress, isConnected } = useAppKitAccount()
+
+  const { setOpen } = useModal()
+  const { address: connectedAddress, isConnected } = useAccount()
 
   const limeAccent = isLight ? "#000000" : "#d4ff00"
 
@@ -219,9 +219,9 @@ export default function ConnectSection() {
                 <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
               </div>
 
-              {/* Reown AppKit Connection Button */}
+              {/* ConnectKit Button */}
               <button
-                onClick={() => open()}
+                onClick={() => setOpen(true)}
                 className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"
                 style={{
                   background: limeAccent,

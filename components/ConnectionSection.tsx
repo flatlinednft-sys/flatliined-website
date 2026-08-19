@@ -89,7 +89,7 @@ export default function ConnectSection() {
 
   return (
     <section
-      className={`relative min-h-fit p-6 md:p-16 pt-20 pb-12 rounded-t-[50px] overflow-hidden transition-colors duration-500 ${
+      className={`relative min-h-fit px-4 py-8 sm:p-10 md:p-16 pt-12 md:pt-20 pb-8 md:pb-12 rounded-t-[24px] sm:rounded-t-[36px] md:rounded-t-[48px] overflow-hidden transition-colors duration-500 ${
         isLight ? "bg-white text-black" : "bg-black text-white"
       }`}
     >
@@ -97,11 +97,11 @@ export default function ConnectSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         <ScrollReveal>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2" style={{ background: accent }} />
               <span
-                className={`font-mono text-xs tracking-widest uppercase ${
+                className={`font-mono text-[10px] sm:text-xs tracking-widest uppercase ${
                   isLight ? "text-zinc-600" : "text-zinc-400"
                 }`}
               >
@@ -114,7 +114,7 @@ export default function ConnectSection() {
 
         <ScrollReveal delay={0.05}>
           <div
-            className="w-full md:max-w-8xl transition-colors duration-500"
+            className="w-full max-w-full transition-colors duration-500"
             style={{
               aspectRatio: "3000 / 500",
               backgroundColor: isLight ? "#000000" : "#d4ff00",
@@ -134,7 +134,7 @@ export default function ConnectSection() {
 
         <ScrollReveal delay={0.1}>
           <p
-            className={`font-mono text-[10px] md:text-base uppercase tracking-wide mt-2 ${
+            className={`font-mono text-[10px] sm:text-xs md:text-sm uppercase tracking-wide mt-1 sm:mt-2 ${
               isLight ? "text-zinc-600" : "text-zinc-500"
             }`}
           >
@@ -142,15 +142,15 @@ export default function ConnectSection() {
           </p>
         </ScrollReveal>
 
-        <div className="h-10 md:h-16" />
+        <div className="h-6 sm:h-10 md:h-12" />
 
-        <ScrollReveal delay={0.1} y={30} blur={true}>
+        <ScrollReveal delay={0.1} y={20} blur={true}>
           <div
-            className="border-l-2 pl-4 max-w-3xl ml-auto"
+            className="border-l-2 pl-3 sm:pl-4 max-w-3xl ml-auto"
             style={{ borderColor: `${accent}66` }}
           >
             <p
-              className={`font-mono text-[10px] md:text-sm lg:text-lg leading-relaxed uppercase tracking-wide text-justify ${
+              className={`font-mono text-[10px] sm:text-xs md:text-sm lg:text-base leading-relaxed uppercase tracking-wide text-justify ${
                 isLight ? "text-zinc-700" : "text-zinc-300"
               }`}
             >
@@ -159,7 +159,7 @@ export default function ConnectSection() {
           </div>
         </ScrollReveal>
 
-        <div className="h-10 md:h-16" />
+        <div className="h-6 sm:h-10 md:h-12" />
 
         <ScrollReveal delay={0.15}>
           <ConnectButton.Custom>
@@ -172,7 +172,7 @@ export default function ConnectSection() {
                   className="w-full"
                   {...(!ready && { "aria-hidden": true, style: { opacity: 0, pointerEvents: "none" } })}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-stretch gap-4 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-stretch gap-3 sm:gap-4 w-full">
                     <div className="group relative flex items-stretch overflow-hidden min-w-0">
                       <input
                         type="text"
@@ -183,7 +183,7 @@ export default function ConnectSection() {
                         }}
                         onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
                         placeholder="0X... PASTE ADDRESS"
-                        className="flex-1 min-w-0 font-mono text-xs sm:text-sm uppercase tracking-wide bg-transparent border-2 border-r-0 px-4 py-4 outline-none transition-colors duration-500"
+                        className="flex-1 min-w-0 font-mono text-xs sm:text-sm uppercase tracking-wide bg-transparent border-2 border-r-0 px-3 sm:px-4 py-3 sm:py-4 outline-none transition-colors duration-500"
                         style={{
                           borderColor: limeAccent,
                           color: limeAccent,
@@ -192,14 +192,14 @@ export default function ConnectSection() {
                       <button
                         onClick={handleManualSubmit}
                         aria-label="Submit address"
-                        className="shrink-0 flex items-center justify-center font-black px-5 border-2 transition-transform active:scale-95"
+                        className="shrink-0 flex items-center justify-center font-black px-4 sm:px-5 border-2 transition-transform active:scale-95"
                         style={{
                           borderColor: limeAccent,
                           background: limeAccent,
                           color: isLight ? "#FFFFFF" : "#000000",
                         }}
                       >
-                        {validSubmitted && !connected ? <FiCheck size={18} /> : <FiArrowRight size={18} />}
+                        {validSubmitted && !connected ? <FiCheck size={16} /> : <FiArrowRight size={16} />}
                       </button>
                       <span
                         className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12"
@@ -215,7 +215,7 @@ export default function ConnectSection() {
                       OR
                     </div>
                     <div
-                      className={`flex sm:hidden items-center gap-3 font-mono text-xs uppercase ${
+                      className={`flex sm:hidden items-center gap-2 font-mono text-[10px] uppercase ${
                         isLight ? "text-zinc-500" : "text-zinc-500"
                       }`}
                     >
@@ -226,7 +226,7 @@ export default function ConnectSection() {
 
                     <button
                       onClick={connected ? openAccountModal : openConnectModal}
-                      className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-4 text-xs sm:text-sm"
+                      className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"
                       style={{
                         background: limeAccent,
                         borderColor: isLight ? "#000000" : "#000000",
@@ -249,7 +249,7 @@ export default function ConnectSection() {
                   </div>
 
                   {addressError && (
-                    <span className="mt-3 block font-mono text-xs uppercase text-red-500">
+                    <span className="mt-2 block font-mono text-[10px] sm:text-xs uppercase text-red-500">
                       INVALID ADDRESS FORMAT
                     </span>
                   )}
@@ -258,16 +258,16 @@ export default function ConnectSection() {
                     <>
                       <span
                         key={`label-${activeAddress}`}
-                        className="mt-6 flex items-center gap-2 font-mono text-xs uppercase address-reveal"
+                        className="mt-4 sm:mt-6 flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase address-reveal"
                         style={{ color: limeAccent }}
                       >
                         <FiCheck size={14} /> [ LINK_ESTABLISHED ]
                       </span>
 
-                      <div className="mt-6 w-full min-w-0 overflow-hidden">
+                      <div className="mt-3 sm:mt-6 w-full min-w-0 overflow-hidden">
                         <span
                           key={activeAddress}
-                          className="block font-mono font-black tracking-tight text-2xl sm:text-4xl md:text-6xl lg:text-7xl leading-[1.1] break-all address-reveal"
+                          className="block font-mono font-black tracking-tight text-lg sm:text-3xl md:text-5xl lg:text-6xl leading-tight break-all address-reveal"
                           style={{
                             color: isLight ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.5)",
                             WebkitMaskImage:
@@ -287,15 +287,15 @@ export default function ConnectSection() {
           </ConnectButton.Custom>
         </ScrollReveal>
 
-        <div className="h-6 md:h-8" />
+        <div className="h-4 sm:h-6 md:h-8" />
       </div>
 
       <ScrollReveal delay={0.2} once blur={false}>
-        <div className="relative px-8 sm:px-12 md:px-24 py-6 overflow-visible">
+        <div className="relative px-2 sm:px-8 md:px-16 py-4 sm:py-6 overflow-visible">
           <Marquee pauseOnHover className="[--duration:25s]">
             {["nft1.png", "nft2.png", "nft3.png", "nft4.png", "nft5.png", "nft6.png", "nft7.png"].map(
               (f, i) => (
-                <div key={f + i} className="w-44 sm:w-32 md:w-40 lg:w-60 shrink-0 px-2">
+                <div key={f + i} className="w-28 sm:w-36 md:w-48 lg:w-56 shrink-0 px-1 sm:px-2">
                   <GlowCard src={`/images/${f}`} alt="Flatlined NFT" tilt={0} />
                 </div>
               )
@@ -304,11 +304,11 @@ export default function ConnectSection() {
         </div>
       </ScrollReveal>
 
-      <div className="h-4 md:h-6" />
+      <div className="h-2 sm:h-4 md:h-6" />
 
       <ScrollReveal delay={0.05} y={16}>
         <div
-          className={`relative z-10 font-mono text-[10px] uppercase max-w-7xl mx-auto mt-6 ${
+          className={`relative z-10 font-mono text-[9px] sm:text-[10px] uppercase max-w-7xl mx-auto mt-4 sm:mt-6 ${
             isLight ? "text-zinc-400" : "text-zinc-600"
           }`}
         >

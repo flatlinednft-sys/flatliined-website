@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useAccount } from "wagmi"
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react"
 import { FiCheck, FiArrowRight } from "react-icons/fi"
 import GlowCard from "./GlowCard"
+import EdgerunnerFrame from "./EdgerunnerFrame"
 import ThemeToggle from "./ThemeToggle"
 import { Marquee } from "./magicui/marquee"
 import { useTheme } from "./ThemeContext"
@@ -37,7 +37,8 @@ async function saveAddressToExcel(address: string, source: "manual" | "connected
 
 export default function ConnectSection() {
   const { isLight, toggleTheme, accent } = useTheme()
-  const { address: connectedAddress, isConnected } = useAccount()
+  const { open } = useAppKit()
+  const { address: connectedAddress, isConnected } = useAppKitAccount()
 
   const limeAccent = isLight ? "#000000" : "#d4ff00"
 
@@ -50,7 +51,7 @@ export default function ConnectSection() {
   useEffect(() => {
     if (isConnected && connectedAddress) {
       const normalizedConnected = connectedAddress.toLowerCase()
-      
+
       if (lastSyncedRef.current !== normalizedConnected) {
         lastSyncedRef.current = normalizedConnected
         setSubmittedAddress(connectedAddress)
@@ -83,7 +84,7 @@ export default function ConnectSection() {
     }
   }
 
-  const activeAddress = (isConnected && connectedAddress) ? connectedAddress : submittedAddress
+  const activeAddress = isConnected && connectedAddress ? connectedAddress : submittedAddress
   const validSubmitted = Boolean(activeAddress)
 
   return (
@@ -92,6 +93,7 @@ export default function ConnectSection() {
         isLight ? "bg-white text-black" : "bg-black text-white"
       }`}
     >
+      <EdgerunnerFrame color={accent} />
 
       <div className="relative z-10 max-w-7xl mx-auto">
         <ScrollReveal>
@@ -160,129 +162,120 @@ export default function ConnectSection() {
         <div className="h-6 sm:h-10 md:h-12" />
 
         <ScrollReveal delay={0.15}>
-          <ConnectButton.Custom>
-            {({ account, chain, openConnectModal, openAccountModal, mounted }) => {
-              const ready = mounted
-              const connected = ready && account && chain
-
-              return (
-                <div
-                  className="w-full"
-                  {...(!ready && { "aria-hidden": true, style: { opacity: 0, pointerEvents: "none" } })}
+          <div className="w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-stretch gap-3 sm:gap-4 w-full">
+              {/* Manual Input */}
+              <div className="group relative flex items-stretch overflow-hidden min-w-0">
+                <input
+                  type="text"
+                  value={manualAddress}
+                  onChange={(e) => {
+                    setManualAddress(e.target.value)
+                    if (addressError) setAddressError(false)
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
+                  placeholder="0X... PASTE ADDRESS"
+                  className="flex-1 min-w-0 font-mono text-xs sm:text-sm uppercase tracking-wide bg-transparent border-2 border-r-0 px-3 sm:px-4 py-3 sm:py-4 outline-none transition-colors duration-500"
+                  style={{
+                    borderColor: limeAccent,
+                    color: limeAccent,
+                  }}
+                />
+                <button
+                  onClick={handleManualSubmit}
+                  aria-label="Submit address"
+                  className="shrink-0 flex items-center justify-center font-black px-4 sm:px-5 border-2 transition-transform active:scale-95"
+                  style={{
+                    borderColor: limeAccent,
+                    background: limeAccent,
+                    color: isLight ? "#FFFFFF" : "#000000",
+                  }}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-stretch gap-3 sm:gap-4 w-full">
-                    <div className="group relative flex items-stretch overflow-hidden min-w-0">
-                      <input
-                        type="text"
-                        value={manualAddress}
-                        onChange={(e) => {
-                          setManualAddress(e.target.value)
-                          if (addressError) setAddressError(false)
-                        }}
-                        onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
-                        placeholder="0X... PASTE ADDRESS"
-                        className="flex-1 min-w-0 font-mono text-xs sm:text-sm uppercase tracking-wide bg-transparent border-2 border-r-0 px-3 sm:px-4 py-3 sm:py-4 outline-none transition-colors duration-500"
-                        style={{
-                          borderColor: limeAccent,
-                          color: limeAccent,
-                        }}
-                      />
-                      <button
-                        onClick={handleManualSubmit}
-                        aria-label="Submit address"
-                        className="shrink-0 flex items-center justify-center font-black px-4 sm:px-5 border-2 transition-transform active:scale-95"
-                        style={{
-                          borderColor: limeAccent,
-                          background: limeAccent,
-                          color: isLight ? "#FFFFFF" : "#000000",
-                        }}
-                      >
-                        {validSubmitted && !connected ? <FiCheck size={16} /> : <FiArrowRight size={16} />}
-                      </button>
-                      <span
-                        className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12"
-                        style={{ background: `${limeAccent}1A` }}
-                      />
-                    </div>
+                  {validSubmitted && !isConnected ? <FiCheck size={16} /> : <FiArrowRight size={16} />}
+                </button>
+                <span
+                  className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12"
+                  style={{ background: `${limeAccent}1A` }}
+                />
+              </div>
 
-                    <div
-                      className={`hidden sm:flex items-center justify-center font-mono text-xs uppercase px-1 ${
-                        isLight ? "text-zinc-500" : "text-zinc-500"
-                      }`}
-                    >
-                      OR
-                    </div>
-                    <div
-                      className={`flex sm:hidden items-center gap-2 font-mono text-[10px] uppercase ${
-                        isLight ? "text-zinc-500" : "text-zinc-500"
-                      }`}
-                    >
-                      <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
-                      OR
-                      <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
-                    </div>
+              {/* Dividers */}
+              <div
+                className={`hidden sm:flex items-center justify-center font-mono text-xs uppercase px-1 ${
+                  isLight ? "text-zinc-500" : "text-zinc-500"
+                }`}
+              >
+                OR
+              </div>
+              <div
+                className={`flex sm:hidden items-center gap-2 font-mono text-[10px] uppercase ${
+                  isLight ? "text-zinc-500" : "text-zinc-500"
+                }`}
+              >
+                <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
+                OR
+                <span className={`h-px flex-1 ${isLight ? "bg-black/20" : "bg-white/20"}`} />
+              </div>
 
-                    <button
-                      onClick={connected ? openAccountModal : openConnectModal}
-                      className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"
-                      style={{
-                        background: limeAccent,
-                        borderColor: isLight ? "#000000" : "#000000",
-                        color: isLight ? "#FFFFFF" : "#000000",
-                      }}
-                    >
-                      <span className="relative z-10 flex items-center justify-center gap-2">
-                        {connected ? (
-                          <>
-                            <FiCheck size={16} /> JACKED IN
-                          </>
-                        ) : (
-                          <>
-                            CONNECT WALLET <FiArrowRight size={16} />
-                          </>
-                        )}
-                      </span>
-                      <span className="absolute inset-0 bg-white/40 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12" />
-                    </button>
-                  </div>
-
-                  {addressError && (
-                    <span className="mt-2 block font-mono text-[10px] sm:text-xs uppercase text-red-500">
-                      INVALID ADDRESS FORMAT
-                    </span>
-                  )}
-
-                  {activeAddress && (
+              {/* AppKit Pro Wallet Connection Trigger */}
+              <button
+                onClick={() => open()}
+                className="group relative w-full min-w-0 font-black uppercase border-2 overflow-hidden transition-all duration-500 ease-out active:scale-95 py-3 sm:py-4 text-xs sm:text-sm"
+                style={{
+                  background: limeAccent,
+                  borderColor: isLight ? "#000000" : "#000000",
+                  color: isLight ? "#FFFFFF" : "#000000",
+                }}
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {isConnected ? (
                     <>
-                      <span
-                        key={`label-${activeAddress}`}
-                        className="mt-4 sm:mt-6 flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase address-reveal"
-                        style={{ color: limeAccent }}
-                      >
-                        <FiCheck size={14} /> [ LINK_ESTABLISHED ]
-                      </span>
-
-                      <div className="mt-3 sm:mt-6 w-full min-w-0 overflow-hidden">
-                        <span
-                          key={activeAddress}
-                          className="block font-mono font-black tracking-tight text-lg sm:text-3xl md:text-5xl lg:text-6xl leading-tight break-all address-reveal"
-                          style={{
-                            color: isLight ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.5)",
-                            WebkitMaskImage:
-                              "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, transparent 100%)",
-                            maskImage:
-                              "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, transparent 100%)",
-                          }}
-                        >
-                          {activeAddress}
-                        </span>
-                      </div>
+                      <FiCheck size={16} /> JACKED IN
+                    </>
+                  ) : (
+                    <>
+                      CONNECT WALLET <FiArrowRight size={16} />
                     </>
                   )}
+                </span>
+                <span className="absolute inset-0 bg-white/40 -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12" />
+              </button>
+            </div>
+
+            {addressError && (
+              <span className="mt-2 block font-mono text-[10px] sm:text-xs uppercase text-red-500">
+                INVALID ADDRESS FORMAT
+              </span>
+            )}
+
+            {activeAddress && (
+              <>
+                <span
+                  key={`label-${activeAddress}`}
+                  className="mt-4 sm:mt-6 flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase address-reveal"
+                  style={{ color: limeAccent }}
+                >
+                  <FiCheck size={14} /> [ LINK_ESTABLISHED ]
+                </span>
+
+                <div className="mt-3 sm:mt-6 w-full min-w-0 overflow-hidden">
+                  <span
+                    key={activeAddress}
+                    className="block font-mono font-black tracking-tight text-lg sm:text-3xl md:text-5xl lg:text-6xl leading-tight break-all address-reveal"
+                    style={{
+                      color: isLight ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.5)",
+                      WebkitMaskImage:
+                        "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, transparent 100%)",
+                      maskImage:
+                        "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, transparent 100%)",
+                    }}
+                  >
+                    {activeAddress}
+                  </span>
                 </div>
-              )
-            }}
-          </ConnectButton.Custom>
+              </>
+            )}
+          </div>
         </ScrollReveal>
 
         <div className="h-4 sm:h-6 md:h-8" />

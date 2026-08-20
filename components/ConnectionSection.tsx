@@ -48,42 +48,59 @@ export default function ConnectSection() {
   const [manualAddress, setManualAddress] = useState("")
   const [submittedAddress, setSubmittedAddress] = useState<string | null>(null)
   const [addressError, setAddressError] = useState(false)
+  const [walletAlreadyConnectedNotice, setWalletAlreadyConnectedNotice] = useState(false)
 
-  const lastSyncedRef = useRef<string | null>(null)
+  // Tracks the last address synced from the connected wallet (connect/disconnect only).
+  const lastConnectedRef = useRef<string | null>(null)
+  // Tracks the last manually-submitted address (dedupe only — separate from wallet tracking).
+  const lastManualSyncedRef = useRef<string | null>(null)
 
   useEffect(() => {
     if (isConnected && connectedAddress) {
       const normalizedConnected = connectedAddress.toLowerCase()
 
-      if (lastSyncedRef.current !== normalizedConnected) {
-        lastSyncedRef.current = normalizedConnected
+      if (lastConnectedRef.current !== normalizedConnected) {
+        lastConnectedRef.current = normalizedConnected
         setSubmittedAddress(connectedAddress)
         setManualAddress("")
         setAddressError(false)
+        setWalletAlreadyConnectedNotice(false)
         saveAddressToExcel(connectedAddress, "connected")
       }
-    } else if (!isConnected && lastSyncedRef.current) {
-      if (submittedAddress && submittedAddress.toLowerCase() === lastSyncedRef.current) {
+    } else if (!isConnected && lastConnectedRef.current) {
+      if (submittedAddress && submittedAddress.toLowerCase() === lastConnectedRef.current) {
         setSubmittedAddress(null)
       }
-      lastSyncedRef.current = null
+      lastConnectedRef.current = null
+      setWalletAlreadyConnectedNotice(false)
     }
   }, [isConnected, connectedAddress, submittedAddress])
 
   function handleManualSubmit() {
-    const trimmed = manualAddress.trim()
-    if (isValidAddress(trimmed)) {
-      const normalizedManual = trimmed.toLowerCase()
-      setSubmittedAddress(trimmed)
-      setAddressError(false)
+    // Only unconnected wallets are eligible for manual input — once a
+    // wallet is connected, a pasted address is never shown or saved.
+    if (isConnected) {
+      setWalletAlreadyConnectedNotice(true)
+      return
+    }
 
-      if (lastSyncedRef.current !== normalizedManual) {
-        lastSyncedRef.current = normalizedManual
-        saveAddressToExcel(trimmed, "manual")
-      }
-    } else {
+    const trimmed = manualAddress.trim()
+
+    if (!isValidAddress(trimmed)) {
       setAddressError(true)
       setSubmittedAddress(null)
+      return
+    }
+
+    setAddressError(false)
+    setWalletAlreadyConnectedNotice(false)
+    setSubmittedAddress(trimmed)
+
+    const normalizedManual = trimmed.toLowerCase()
+
+    if (lastManualSyncedRef.current !== normalizedManual) {
+      lastManualSyncedRef.current = normalizedManual
+      saveAddressToExcel(trimmed, "manual")
     }
   }
 
@@ -171,13 +188,15 @@ export default function ConnectSection() {
                 <input
                   type="text"
                   value={manualAddress}
+                  disabled={isConnected}
                   onChange={(e) => {
                     setManualAddress(e.target.value)
                     if (addressError) setAddressError(false)
+                    if (walletAlreadyConnectedNotice) setWalletAlreadyConnectedNotice(false)
                   }}
                   onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
-                  placeholder="0X... PASTE ADDRESS"
-                  className="flex-1 min-w-0 font-mono text-xs sm:text-sm uppercase tracking-wide bg-transparent border-2 border-r-0 px-3 sm:px-4 py-3 sm:py-4 outline-none transition-colors duration-500"
+                  placeholder={isConnected ? "WALLET CONNECTED" : "0X... PASTE ADDRESS"}
+                  className="flex-1 min-w-0 font-mono text-xs sm:text-sm uppercase tracking-wide bg-transparent border-2 border-r-0 px-3 sm:px-4 py-3 sm:py-4 outline-none transition-colors duration-500 disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
                     borderColor: limeAccent,
                     color: limeAccent,
@@ -247,6 +266,12 @@ export default function ConnectSection() {
             {addressError && (
               <span className="mt-2 block font-mono text-[10px] sm:text-xs uppercase text-red-500">
                 INVALID ADDRESS FORMAT
+              </span>
+            )}
+
+            {walletAlreadyConnectedNotice && (
+              <span className="mt-2 block font-mono text-[10px] sm:text-xs uppercase text-red-500">
+                WALLET ALREADY CONNECTED
               </span>
             )}
 
